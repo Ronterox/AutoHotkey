@@ -76,18 +76,18 @@ AutoSearchOpGG:
     {
         WinGetPos , , , Width, Height
         WinActivate
+        WinWaitActive
         CoordMode, Mouse, Relative
-        MouseMove, 170, Width>1024? 550:500
+        MouseMove, 170, Width>1024? 550:500, 0
         Clipboard := ""
         Click
         Send, ^a
         Send, ^c
         if(Clipboard != "")
         {
-            StringReplace, result, Clipboard, %JoinMsg%, `%2C, All
-            result:=Trim(result)
-            ;Clipboard:=result
-            MsgBox, https://%Region%.op.gg/multi/query=%result%
+            StringReplace, Clipboard, Clipboard, %A_Space%,, All
+            StringReplace, result, Clipboard, %JoinMsg%, `%2C, Limit=4
+            Clipboard:=result
             Run, %Explorer%.exe https://%Region%.op.gg/multi/query=%result%
         }
     } 
