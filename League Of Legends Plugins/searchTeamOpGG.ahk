@@ -1,4 +1,5 @@
-﻿#SingleInstance, Force
+﻿;Made by Ricardo Montserrat
+#SingleInstance, Force
 
 ;GUI SETTINGS
 ;---------------------------------------
