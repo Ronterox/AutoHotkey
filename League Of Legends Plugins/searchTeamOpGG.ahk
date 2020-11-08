@@ -85,8 +85,8 @@ AutoSearchOpGG:
         Send, ^c
         if(Clipboard != "")
         {
-            StringReplace, Clipboard, Clipboard, %A_Space%,, All
-            StringReplace, result, Clipboard, %JoinMsg%, `%2C, Limit=4
+            StringReplace, result, Clipboard, %JoinMsg%, `%2C, All
+            StringReplace, result, result, %A_Space%,, All
             Clipboard:=result
             Run, %Explorer%.exe https://%Region%.op.gg/multi/query=%result%
         }
