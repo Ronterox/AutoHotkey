@@ -1,4 +1,5 @@
 #SingleInstance force
+#NoEnv
 #Persistent
 
 LALT & f4::CloseApplication()

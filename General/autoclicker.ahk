@@ -1,35 +1,55 @@
 ﻿#SingleInstance, force
+#NoEnv
+
+;TODO: fix start clicking and key cancelation of clicking
 
 ;GUI SETUP
 ;---------------------------------------------
+
 GUI, +AlwaysOnTop
-GUI, Font, , Georgia
+GUI, Font, , Verdana
 ;GUI, Color, cBlack
-GUI, show, xCenter yCenter w225 h250, AutoClicker
+GUI, show, xCenter yCenter w225 h225, AutoClicker
 
 ;GUI BUTTONS
 ;---------------------------------------------
 
-;TODO: Show window coordinates to help set the click pos
-GUI, Add, Text, x50, Coordinates to Click `n(Optional)
-GUI, Add, Text, x50, X
-GUI, Add, Edit, Number w35 vUserPosX x+10
-GUI, Add, Text, x50 x+10, Y
-GUI, Add, Edit, Number w35 vUserPosY x+10
+GUI, Add, Tab, h20, General|Extra|
+
+GUI, Tab, General
 
 GUI, Add, Text, x50, Clicking Delay
 GUI, Add, Edit, Number w50
 Gui, Add, UpDown, vUserDelay, 2
-GUI, Add, Text, x+5, Seconds
+GUI, Add, Text, x+5 yp+6, Seconds
 
-GUI, Add, Text, x50, Which Click to Use
+GUI, Add, Text, x50 y+15, Which Click to Use
 GUI, Add, DDL, vUserClick, Right|Left||
 
-GUI, Add, Text, ,Set Start/Stop Key
-GUI, Add, Edit, x+10 w20 vUserKey gSaveChanges ;TODO: Add click quantity
+GUI, Add, Text, x15 y+15, Set Start/Stop Key
+GUI, Add, Edit, x+10 w25 vUserKey, f1
+GUI, Add, Button, x+1 w55 gSaveChanges, Set Key
 
-GUI, Add, Button, gStartClicking w100 x10, Start Clicking
+GUI, Add, Button, gStartClicking gSaveChanges w100 x10 y+15, Start Clicking
 GUI, Add, Button, gStopClicking w100 x+10, Stop Clicking
+
+GUI, Tab, Extra
+
+GUI, Add, Text, x50 y35, Coordinates to Click `n(Optional)
+GUI, Add, Text, x50 y+10, X
+GUI, Add, Edit, Number w35 vUserPosX x+10
+GUI, Add, Text, x50 yp x+10, Y
+GUI, Add, Edit, Number w35 vUserPosY x+10
+
+GUI, Add, Text, x50 y+20, Clicks Per Click
+GUI, Add, Edit, Number w50 x+5
+Gui, Add, UpDown, vUserClicks, 1
+
+GUI, Add, Text, x50 y+20, Mouse Position
+GUI, Add, Edit, ReadOnly vM_X, Coord X
+GUI, Add, Edit, ReadOnly x+10 vM_Y, Coord Y
+
+SetTimer, FollowMouse, 250
 Return
 
 ;FUNCTIONS AND LABELS
@@ -42,13 +62,11 @@ SaveChanges:
     GUI, Submit, NoHide
     if(UserKey != "")
     {
-        Hotkey, %UserKey%, KeyCommand, On ;TODO: Fix Hotkey second time hit to deactivate
+        Hotkey, %UserKey%, KeyCommand, On
     }
 Return
 
 StartClicking:
-    Gosub, SaveChanges
-
     if(UserDelay == "")
     {
         MsgBox, 4, Warning, You didn't set a clicking delay`, continue?
@@ -69,6 +87,12 @@ StopClicking:
     clicking := false
 Return
 
+FollowMouse:
+    MouseGetPos, new_X, new_Y
+    GuiControl,, m_X, %new_X%
+    GuiControl,, m_Y, %new_Y%
+Return
+
 KeyCommand:
     clicking:= !clicking
     if(clicking)
@@ -79,5 +103,5 @@ Return
 
 AutoClick(WhichClick, posX, posY)
 {
-    MouseClick, %WhichClick%, %posX%, %posY%, , 0
+    MouseClick, %WhichClick%, %posX%, %posY%, UserClicks, 0
 }

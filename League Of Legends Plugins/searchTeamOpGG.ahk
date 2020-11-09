@@ -1,5 +1,6 @@
 ﻿;Made by Ricardo Montserrat
 #SingleInstance, Force
+#NoEnv
 
 ;GUI SETTINGS
 ;---------------------------------------
@@ -15,16 +16,16 @@ GUI, Show, xCenter yCenter w340 h350, Op GG Auto Searcher
 GUI, Add, Text, , === Welcome To The Op GG Auto Searcher! ===`n====================================
 
 GUI, Add, Text, x90, Select your op.gg region:
-GUI, Add, DDL, x75 vRegion w200, EUW|EUN|NA|KOREA|LAN|LAS|
+GUI, Add, DDL, x75 vRegion w200, EUW||EUN|NA|KOREA|LAN|LAS|
 
 GUI, Add, Text, x30, What does it say when you enter the lobby?
-GUI, Add, Edit, x100 vJoinMsg cBlack
+GUI, Add, Edit, x100 vJoinMsg cBlack h22 w140, joined the lobby
 
 GUI, Add, Text, x80, Select the explorer to use:
-GUI, Add, ListBox, vExplorer w200 h60 x70 cBlack, chrome|firefox|opera
+GUI, Add, ListBox, vExplorer w200 h60 x70 cBlack, chrome||firefox|opera
 
 GUI, Add, Text, x80, Assign a search key:
-GUI, Add, Edit, x+10 yp w25 vUserKey cBlack
+GUI, Add, Edit, x+10 yp w25 vUserKey cBlack, f1
 
 GUI, Add, Button, w100 h30 x115 gSaveChanges, Use Settings
 
