@@ -1,4 +1,5 @@
 ﻿;Made by Ricardo Montserrat
+;Most of the commented things are for debugging
 #SingleInstance, Force
 #NoEnv
 
@@ -19,13 +20,13 @@ GUI, Add, Text, x90, Select your op.gg region:
 GUI, Add, DDL, x75 vRegion w200, EUW||EUN|NA|KOREA|LAN|LAS|
 
 GUI, Add, Text, x30, What does it say when you enter the lobby?
-GUI, Add, Edit, x100 vJoinMsg cBlack h22 w140, joined the lobby
+GUI, Add, Edit, x100 vJoinMsg cBlack h22 w140 Lowercase, joined the lobby
 
 GUI, Add, Text, x80, Select the explorer to use:
 GUI, Add, ListBox, vExplorer w200 h60 x70 cBlack, chrome||firefox|opera
 
-GUI, Add, Text, x80, Assign a search key:
-GUI, Add, Edit, x+10 yp w25 vUserKey cBlack, f1
+GUI, Add, Text, x30, Assign a search key:
+GUI, Add, Hotkey, x+10 yp w120 vUserKey, f1
 
 GUI, Add, Button, w100 h30 x115 gSaveChanges, Use Settings
 
@@ -41,6 +42,10 @@ GuiClose:
     ExitApp
 
 SaveChanges:
+    if(UserKey != "")
+    {
+        Hotkey, %UserKey%, AutoSearchOpGG, Off
+    }
     GUI, Submit, NoHide
     if(Region == "")
     {
@@ -64,8 +69,8 @@ SaveChanges:
 
     if(UserKey != "")
     {
-        Hotkey, %UserKey%, AutoSearchOpGG
-        MsgBox, 0, Key Assign Successfully, Key %UserKey% was assign
+        Hotkey, %UserKey%, AutoSearchOpGG, On
+        ;MsgBox, 0, Key Assign Successfully, Key %UserKey% was assign
     }
 
     GuiControl, Show, Search
@@ -76,26 +81,40 @@ Return
 AutoSearchOpGG:
     IfWinExist, ahk_class RCLIENT
     {
-        WinGetPos , , , Width, Height
-        WinActivate
-        WinWaitActive
-        CoordMode, Mouse, Relative
-        MouseMove, 170, Width>1024? 550:500, 0
+    WinGetPos , , , Width, Height
+    WinActivate
+    WinWaitActive
+    CoordMode, Mouse, Relative
+    MouseMove, 170, Width>1024? 550:500, 0
+    Clipboard := ""
+    Click
+    Send, ^a
+    Send, ^c
+    ;Clipboard := "ochinchintsuki joined the lobby`nicon joined the lobby`nfirah joined the lobby`nimnotsogud joined the lobby`nunfriendly clown joined the lobby`n"
+    if(Clipboard != "")
+    {
+        counter := 0
+        oldClipboard := Clipboard
         Clipboard := ""
-        Click
-        Send, ^a
-        Send, ^c
-        if(Clipboard != "")
+        loop, parse, oldClipboard, `n, `r
         {
-            StringReplace, result, Clipboard, %JoinMsg%, `%2C, All
-            StringReplace, result, result, %A_Space%,, All
-            Clipboard:=result
-            Run, %Explorer%.exe https://%Region%.op.gg/multi/query=%result%
+            counter := counter + 1
+            Clipboard:= Clipboard A_LoopField A_Space
+            MsgBox, , Title, %Clipboard%
+            if(counter == 5)
+            {
+               Break
+            }
         }
+        StringReplace, result, Clipboard, %JoinMsg%, `%2C, All
+        StringReplace, result, result, %A_Space%,, All
+        ;Clipboard:=result
+        Run, %Explorer%.exe https://%Region%.op.gg/multi/query=%result%
+    }
     } 
     Else
     {
-        MsgBox, 0, Attention, You need to have the lol client opened
+    MsgBox, 0, Attention, You need to have the lol client opened
     }
 Return
 
