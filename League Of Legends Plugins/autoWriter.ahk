@@ -28,9 +28,11 @@ Return
 ;---------------------------------------
 
 GuiClose:
-    ExitApp, 0
+ExitApp, 0
 
 OnCreate:
+if(FileExist("lolwriter_config.ini"))
+{
     IniRead, hotkeys,lolwriter_config.ini,UserConfig,hotkeys
     if(hotkeys == "" or hotkeys == "ERROR")
     {
@@ -47,12 +49,12 @@ OnCreate:
         GUI, Add, Hotkey, w120 h22 x40 vKey%A_Index%, %keyValue%
         GUI, Add, Edit, w150 h22 x+10 cBlack Multi vEdit%A_Index%, %textValue%
         GuiControl, Enable, Set Hotkeys
-    }
+    }   
+}
 Return
 
 AddHotkey:
     counter:= counter + 1
-    IniWrite, %counter%,lolwriter_config.ini,UserConfig,hotkeys
     if(counter == 1)
     {
         GuiControl, Enable, Set Hotkeys
@@ -79,6 +81,7 @@ DisableAllHotkeys:
 Return
 
 SaveChanges:
+    IniWrite, %counter%,lolwriter_config.ini,UserConfig,hotkeys
     if(hasSetKeys)
     {
         Gosub, DisableAllHotkeys
