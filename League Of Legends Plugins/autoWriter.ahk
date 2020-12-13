@@ -7,19 +7,28 @@ SetWorkingDir, %A_WorkingDir%
 counter:=0
 hasSetKeys := False
 
+winWidth := 650
+winHeight := 350
+
+editW := winWidth * 0.70
+editH := winHeight * 0.15
+
 ;GUI SETTINGS
 ;---------------------------------------
 
 ;GUI, +AlwaysOnTop
 GUI, Font, cBFBFBF s11, Verdana
 GUI, Color, 03588C
-GUI, Show, xCenter yCenter w350 h350, Auto Writer
+GUI, Show, xCenter yCenter w%winWidth% h%winHeight%, Auto Writer
+WinSet, Style, +Resize, A
+WinSet, Style, +WS_SIZEBOX, A
+WinSet, Style, +0x40000, A
 
 ;ADDING BUTTONS GUI
 ;---------------------------------------
-
-GUI, Add, Text, , === Welcome To The Lol Auto Writer! ===`n===========================
-GUI, Add, Button, x20 gAddHotkey w150, Add New Hotkey
+winWidth := winWidth * 0.25
+GUI, Add, Text, x%winWidth% , === Welcome To The Lol Auto Writer! ===`n===========================
+GUI, Add, Button, x%winWidth% gAddHotkey w150, Add New Hotkey
 GUI, Add, Button, x+10 gSaveChanges w150, Set Hotkeys
 GuiControl, disable, Set Hotkeys
 Goto, OnCreate
@@ -48,7 +57,7 @@ if(FileExist("lolwriter_config.ini"))
         IniRead, keyValue,lolwriter_config.ini,Keys,key_%A_Index%
         IniRead, textValue,lolwriter_config.ini,Text,keytext_%A_Index%
         GUI, Add, Hotkey, w120 h22 x40 vKey%A_Index%, %keyValue%
-        GUI, Add, Edit, w150 h22 x+10 cBlack Multi vEdit%A_Index%, %textValue%
+        GUI, Add, Edit, w%editW% h%editH% x+10 cBlack Multi vEdit%A_Index%, %textValue%
         GuiControl, Enable, Set Hotkeys
     }   
     Gosub, SaveChanges
@@ -66,7 +75,7 @@ AddHotkey:
         GuiControl, disable, Add New Hotkey
     }
     GUI, Add, Hotkey, w120 h22 x40 vKey%counter%, f1
-    GUI, Add, Edit, w150 h22 x+10 cBlack Multi vEdit%counter%, Text to print
+    GUI, Add, Edit, w%editW% h%editH% x+10 cBlack Multi vEdit%counter%, Text to print
 Return
 
 DisableAllHotkeys:
