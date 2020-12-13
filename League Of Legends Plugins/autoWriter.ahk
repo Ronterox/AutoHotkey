@@ -1,6 +1,7 @@
 ﻿;Made by Ricardo Montserrat
 #SingleInstance, Force
 #NoEnv
+#UseHook On
 SetWorkingDir, %A_WorkingDir%
 
 counter:=0
@@ -50,6 +51,7 @@ if(FileExist("lolwriter_config.ini"))
         GUI, Add, Edit, w150 h22 x+10 cBlack Multi vEdit%A_Index%, %textValue%
         GuiControl, Enable, Set Hotkeys
     }   
+    Gosub, SaveChanges
 }
 Return
 
@@ -118,8 +120,12 @@ SendMessageLol(position)
         if(position == A_Index)
         {
             textTo:= Edit%A_Index%
-            SetKeyDelay, 0
-            Send, {Enter} %textTo% {Enter}
+            SetKeyDelay, -1
+            Send, {Enter}
+            Sleep, 50
+            Send, %textTo%
+            Sleep, 50
+            Send, {Enter}
             Break
         }
     }
